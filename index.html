@@ -6,7 +6,6 @@
     <title>Contact Form</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Base styles */
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f7fa;
@@ -35,7 +34,6 @@
             margin-top: 10px;
         }
 
-        /* Modal & Overlay */
         #overlay {
             display: none;
             position: fixed;
@@ -81,14 +79,12 @@
             font-weight: 500;
         }
 
-        /* Input Focus */
         .form-group input:focus {
             outline: none;
             border-color: #4CAF50;
             background-color: #fff;
         }
 
-        /* Button Container */
         .button-container {
             display: flex;
             justify-content: space-between;
@@ -101,13 +97,10 @@
 </head>
 <body>
 
-    <!-- Button to Open Modal -->
     <button onclick="openModal()">Open Contact Form</button>
 
-    <!-- Overlay Background -->
     <div id="overlay" onclick="closeModal()"></div>
 
-    <!-- Custom Modal Form -->
     <div id="customModal">
         <h3>Contact Us</h3>
         <form id="customForm">
@@ -124,7 +117,6 @@
                 <input type="text" id="message" required>
             </div>
 
-            <!-- Button Container -->
             <div class="button-container">
                 <button type="submit">Submit</button>
                 <button type="button" class="close-btn" onclick="closeModal()">Close</button>
@@ -133,24 +125,20 @@
     </div>
 
     <script>
-        // Open Modal
         function openModal() {
             document.getElementById('customModal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
         }
 
-        // Close Modal
         function closeModal() {
             document.getElementById('customModal').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
 
-        // Form Submission
         document.getElementById("customForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
             let formData = new FormData();
-            // Combine inputs into one message field
             let combinedMessage = `
                 Name: ${document.getElementById("name").value}
                 Phone & Email: ${document.getElementById("phoneEmail").value}
@@ -158,15 +146,14 @@
             `;
             formData.append("entry.1800120861", combinedMessage);
 
-            // Google Form URL for submission
             fetch("https://docs.google.com/forms/d/e/1FAIpQLSe3BQEZ3NIJK1JHyZjkf_yG8CHBSJsOuuUcLEh9lZkPuOIZKg/formResponse", {
                 method: "POST",
                 body: formData,
-                mode: "no-cors" // Ensure submission without CORS issues
+                mode: "no-cors"
             }).then(() => {
                 alert("Form submitted successfully!");
-                closeModal(); // Close modal after submission
-                document.getElementById("customForm").reset(); // Reset form fields
+                closeModal();
+                document.getElementById("customForm").reset();
             }).catch(() => {
                 alert("Error submitting form. Please try again.");
             });
