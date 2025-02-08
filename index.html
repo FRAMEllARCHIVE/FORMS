@@ -4,21 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Basic Modal Styling */
-        #customModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
+        /* Base styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
         }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .close-btn {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+
+        /* Modal & Overlay */
         #overlay {
             display: none;
             position: fixed;
@@ -27,32 +44,58 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
+
+        #customModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            z-index: 1000;
+            text-align: center;
+        }
+
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
+
         .form-group input {
             width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
         }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
+
+        h3 {
+            margin-bottom: 20px;
+            font-weight: 500;
         }
-        button:hover {
-            background-color: #218838;
+
+        /* Input Focus */
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background-color: #fff;
         }
-        .close-btn {
-            background-color: #dc3545;
-            margin-top: 10px;
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-container button {
+            width: 48%;
         }
     </style>
 </head>
@@ -69,49 +112,61 @@
         <h3>Contact Us</h3>
         <form id="customForm">
             <div class="form-group">
-                <label>Name:</label>
+                <label for="name">Name:</label>
                 <input type="text" id="name" required>
             </div>
             <div class="form-group">
-                <label>Phone & Email:</label>
+                <label for="phoneEmail">Phone & Email:</label>
                 <input type="text" id="phoneEmail" required>
             </div>
             <div class="form-group">
-                <label>Message:</label>
+                <label for="message">Message:</label>
                 <input type="text" id="message" required>
             </div>
-            <button type="submit">Submit</button>
-            <button type="button" class="close-btn" onclick="closeModal()">Close</button>
+
+            <!-- Button Container -->
+            <div class="button-container">
+                <button type="submit">Submit</button>
+                <button type="button" class="close-btn" onclick="closeModal()">Close</button>
+            </div>
         </form>
     </div>
 
     <script>
+        // Open Modal
         function openModal() {
             document.getElementById('customModal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
         }
 
+        // Close Modal
         function closeModal() {
             document.getElementById('customModal').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
 
+        // Form Submission
         document.getElementById("customForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault(); // Prevent default form submission
 
             let formData = new FormData();
-            formData.append("entry.1867903434", document.getElementById("name").value);
-            formData.append("entry.1369658423", document.getElementById("phoneEmail").value);
-            formData.append("entry.1293341885", document.getElementById("message").value);
+            // Combine inputs into one message field
+            let combinedMessage = `
+                Name: ${document.getElementById("name").value}
+                Phone & Email: ${document.getElementById("phoneEmail").value}
+                Message: ${document.getElementById("message").value}
+            `;
+            formData.append("entry.1800120861", combinedMessage);
 
-            fetch("https://docs.google.com/forms/d/e/1FAIpQLSd2JhwKNHZdSlb6aT_rAA601YLZv_OqHxY2X5zFgyPaz7S8uA/formResponse", {
+            // Google Form URL for submission
+            fetch("https://docs.google.com/forms/d/e/1FAIpQLSe3BQEZ3NIJK1JHyZjkf_yG8CHBSJsOuuUcLEh9lZkPuOIZKg/formResponse", {
                 method: "POST",
                 body: formData,
-                mode: "no-cors" // Ensures form submission without CORS issues
+                mode: "no-cors" // Ensure submission without CORS issues
             }).then(() => {
                 alert("Form submitted successfully!");
-                closeModal(); // Close the modal after successful submission
-                document.getElementById("customForm").reset(); // Clear form fields
+                closeModal(); // Close modal after submission
+                document.getElementById("customForm").reset(); // Reset form fields
             }).catch(() => {
                 alert("Error submitting form. Please try again.");
             });
