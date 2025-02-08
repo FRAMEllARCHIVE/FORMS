@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <style>
+        /* Basic Modal Styling */
+        #customModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .close-btn {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Button to Open Modal -->
+    <button onclick="openModal()">Open Contact Form</button>
+
+    <!-- Overlay Background -->
+    <div id="overlay" onclick="closeModal()"></div>
+
+    <!-- Custom Modal Form -->
+    <div id="customModal">
+        <h3>Contact Us</h3>
+        <form id="customForm">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label>Phone & Email:</label>
+                <input type="text" id="phoneEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <input type="text" id="message" required>
+            </div>
+            <button type="submit">Submit</button>
+            <button type="button" class="close-btn" onclick="closeModal()">Close</button>
+        </form>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('customModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        document.getElementById("customForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Stop default form submission
+
+            let formData = new FormData();
+            formData.append("entry.1867903434", document.getElementById("name").value);
+            formData.append("entry.1369658423", document.getElementById("phoneEmail").value);
+            formData.append("entry.1293341885", document.getElementById("message").value);
+
+            fetch("https://docs.google.com/forms/d/e/1FAIpQLSd2JhwKNHZdSlb6aT_rAA601YLZv_OqHxY2X5zFgyPaz7S8uA/formResponse", {
+                method: "POST",
+                body: formData,
+                mode: "no-cors" // Ensures form submission without CORS issues
+            }).then(() => {
+                alert("Form submitted successfully!");
+                closeModal(); // Close the modal after successful submission
+                document.getElementById("customForm").reset(); // Clear form fields
+            }).catch(() => {
+                alert("Error submitting form. Please try again.");
+            });
+        });
+    </script>
+
+</body>
+</html>
